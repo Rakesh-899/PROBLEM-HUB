@@ -6,8 +6,7 @@ use actix_web::{web, App, HttpServer, middleware::Logger};
 use env_logger;
 use dotenv::dotenv;
 use sqlx::{postgres::{PgPool, PgPoolOptions}};
-use serde::{Serialize, Deserialize};
-use handlers::{signup, login, protected_route, reset_password, get_profile};
+use handlers::{signup, login, protected_route, reset_password, get_profile, send_otp, verify_otp};
 use middleware::AuthMiddleware;
 
 
@@ -44,6 +43,8 @@ async fn main() -> Result<(), std::io::Error> {
         .service(signup)
         .service(login)
         .service(reset_password)
+        .service(send_otp)
+        .service(verify_otp)
         .service(
             web::scope("/api") 
                 .wrap(AuthMiddleware)
