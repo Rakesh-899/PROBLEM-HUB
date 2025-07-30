@@ -3,6 +3,7 @@ mod models;
 mod middleware;
 
 use actix_web::{web, App, HttpServer, middleware::Logger};
+use actix_cors::Cors;
 use env_logger;
 use dotenv::dotenv;
 use sqlx::{postgres::{PgPool, PgPoolOptions}};
@@ -40,6 +41,7 @@ async fn main() -> Result<(), std::io::Error> {
         App::new()
         .app_data(web::Data::new(pool.clone()))
         .wrap(Logger::default())
+        .wrap(Cors::permissive())
         .service(signup)
         .service(login)
         .service(reset_password)
